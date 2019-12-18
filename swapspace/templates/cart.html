@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<div class="shopping-cart">
+	  <table id="cart" class="table table-hover table-condensed">
+		<thead>
+			<tr>
+				<th style="width:50%">Product</th>
+				<th style="width:10%">Price</th>
+				<th style="width:8%">Quantity</th>
+				<th style="width:22%" class="text-center">Subtotal</th>
+				<th style="width:10%"></th>
+			</tr>
+		</thead>
+
+		<tbody>
+		{% for item in items%}
+			<tr>
+			<td data-th="Product">
+				<div class="row">
+					<div class="col-3 hidden-xs">
+						<img src="{{MEDIA_URL}}{{item.sell_item.image1}}" class="img-responsive" style="width:100px;height:100px;" />
+					</div>
+					<div class="col-9">
+					  <h4 class="nomargin">{{ item.name }}</h4>
+					  <p>{{ item.description }}</p>
+					</div>
+				</div>
+			</td>
+			<td data-th="Price">{{ item.sell_item.price }}</td>
+			<td data-th="Quantity">
+			  <div id="item_quantity">
+          		<span class="form-control text-center" id="buy_item_{{item.id}}">1</span>
+        	  </div>
+			  <button type="button" name="button" onclick="addQuantity({{item.id}})">+</button>
+        <button type="button" name="button" onclick="minQuantity({{item.id}})">-</button>
+			</td>
+			<td data-th="Subtotal" class="text-center" id="subtotal_{{item.id}}">{{item.sell_item.price}}</td>
+			<td class="actions" data-th="">
+			  <button onclick="window.location.href='/shoppingCart/removeFromCart/{{item.id}}' " class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+			</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+
+		<tfoot>
+			<tr>
+				<td><a href="/trade" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+				<td colspan="2" class="hidden-xs"></td>
+				<td class="hidden-xs text-center"><strong id="totalbundle">${{totalprice}}</strong></td>
+				<td>
+					<a href="create_bundle_order" class="btn btn-success btn-block">Checkout</i>
+					</a></td>
+			</tr>
+	    </tfoot>
+	  </table>
+	</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/change_quantity.js' %}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                
+                <div class="card-body">
+                    <h5 class="card-title text-center">Update Address</h5>
+
+                    <form class="form-signin needs-validation" action="{% url 'edit-address' %}" method="post" novalidate>
+                        <div class="form-label-group">
+                            <input type="text" id="inputAddress1" name="address1" class="form-control" placeholder="Street and number, P.O.box, c/o." value="{{address.address1}}" required autofocus>
+                            <label for="inputAddress1">Street and number, P.O.box, c/o.</label>
+                            <div class="invalid-feedback">
+                              {{ form.address1.errors }}
+                            </div>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="text" id="inputAddress2" name="address2" class="form-control" placeholder="Apartment, suite, unit, building, floor, etc." value="{{address.address2}}" required autofocus>
+                            <label for="inputAddress2">Apartment, suite, unit, building, floor, etc.</label>
+                            <div class="invalid-feedback">
+                              {{ form.address2.errors }}
+                            </div>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputCity" name="city" class="form-control" placeholder="City" value="{{address.city}}" required>
+                            <label for="inputCity">City</label>
+                            <div class="invalid-feedback">
+                              {{ form.city.errors }}
+                            </div>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputState" name="state" class="form-control" placeholder="State" value="{{address.state}}" required>
+                            <label for="inputState">State</label>
+                            <div class="invalid-feedback">
+                              {{ form.state.errors }}
+                            </div>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputZipCode" name="zip_code" class="form-control" pattern="[0-9]{5}" placeholder="Five digit zip code" value="{{address.zip_code}}" required>
+                            <label for="inputZipCode">Zip Code</label>
+                            <div class="invalid-feedback">
+                              {{ form.zip_code.errors }}
+                            </div>
+                        </div>
+
+                        <button class="btn btn-lg btn-block text-uppercase form-submit-btn" type="submit">Update Address</button>
+
+                        {% csrf_token %}
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+
+                <div class="card-body">
+                    <h5 class="card-title text-center">Welcome to SwapSpace Chatroom</h5>
+
+                    <div class="form-signin">
+                        <div class="form-label-group">
+                            <input type="text" id="room-name-input" name="roomname" class="form-control" placeholder="Chatroom Code" required autofocus>
+                            <label for="room-name-input">Room Code</label>
+                        </div>
+                        <button id="room-name-submit" class="btn btn-lg btn-block text-uppercase form-submit-btn" type="submit">Start Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+<script type="text/javascript">
+    document.querySelector('#room-name-input').focus();
+    document.querySelector('#room-name-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // user hits enter, return
+            document.querySelector('#room-name-submit').click();
+        }
+    };
+
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        var roomName = document.querySelector('#room-name-input').value;
+        window.location.pathname = '/chat/' + roomName + '/';
+    };  
+</script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- <div class="itemdiv">
+    <div class="itemimg">
+        <img src="{% if image %}{{ image }}{% else %}{% static 'img/no_img.png' %}{% endif %}" height="150" width="150"><br>
+        {{name}}<br>
+        {{description}}<br>
+        {{price}}<br>
+    </div>
+</div> -->
+
+<div class="item-detail-container container">
+	<div class="wrapper row">
+		<div class="preview col-4">
+			<div class="preview-pic tab-content">
+                <div class="tab-pane active" id="pic-1">
+                    <img src="{{MEDIA_URL}}{{item.image1}}">
+            	</div>
+    		  	<div class="tab-pane" id="pic-2">
+                    <img src="{{MEDIA_URL}}{{item.image2}}">
+    		  	</div>
+                <div class="tab-pane" id="pic-3">
+                    <img src="{{MEDIA_URL}}{{item.image3}}">
+                </div>
+			</div>
+
+			<ul class="preview-thumbnail nav nav-tabs">
+				<li class="active">
+					<a data-target="#pic-1" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image1}}">
+					</a>
+				</li>
+				<li>
+					<a data-target="#pic-2" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image2}}">
+					</a>
+				</li>
+				<li>
+					<a data-target="#pic-3" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image3}}">
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="details col-5">
+			<label class="product-title">{{item.name}}</label>
+			<p class="product-description">{{item.description}}</p>
+			<label class="entry-container">
+				<span class="entry-label">Price</span>
+				<span>&#58;</span>
+				<span class="price entry-content">${{item.price}}</span>
+			</label>
+			<label class="entry-container">
+				<span>&nbsp;</span>
+				<span class="entry-content">{{address}}</span>
+			</label>
+			<div class="action">
+				<button onclick="window.location.href='/trade/viewAddToCart/{{item.id}}'" class="send-request-btn btn btn-default" type="button">Add To Cart</button>
+				<button class="like btn btn-default" type="button">
+    		    {% if rated %}
+                <i class="fas fa-heart" id="id-rate"></i>
+                {% else %}
+                <i class="far fa-heart" id="id-rate" onclick="sellDetailAddToFavorites({{item.id}})"></i>
+                {% endif %}
+        </button>
+			</div>
+		</div>
+		<div class="user-info col-3">
+			<div class="avatar preview-pic">
+				<div class="tab-pane">
+					<img src="" />
+				</div>
+			</div>
+			<div class="bio">
+				<span class="username">{{owner.username}}</span>
+			</div>
+			<div class="rating">
+				<div class="stars">
+					{% for i in rating %}
+					<span class="fa fa-star checked"></span>
+					{% endfor %}
+				</div>
+				<span class="review-no">{{rate_cnt}}<span>&nbsp;reviews</span></span>
+
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+{% endblock %}

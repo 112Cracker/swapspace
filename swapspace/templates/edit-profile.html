@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row edit-profile">
+    <div class="col-8 offset-2">
+            <!-- edit form column -->
+        <h2 class="text-lg-center" style="text-align: center;">Edit Profile</h2>
+        <div class="text-xs-center col-12 avatar">
+                {% if profile.portrait %}
+                <img src="{% url 'profile_picture' profile.user %}" alt="avatar" class="img-fluid">
+                {% else %}
+                <img src="{% static '/img/no_img.png' %}" class="img-fluid">
+                {% endif %}
+        <form role="form" class="needs-validation" id="userprofile" action="{% url 'edit-profile' %}" method="post" enctype="multipart/form-data" novalidate>
+                <h6 class="m-4">Upload a different photo</h6>
+                <label class="custom-file">
+                  <input style="display: none;" type="file" id="id_profile_picture" class="custom-file-input" name="portrait">
+                  <span class="custom-file-control">Choose file</span>
+                </label>
+        </div>
+        <div class="col-12 personal-info">
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Bio</label>
+                    <div class="col-lg-9" id="id_bio_text">
+                        <input class="form-control" type="text" name="bio_text" value="{{profile.bio_text}}" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label"></label>
+                    <div class="col-lg-9">
+                        <input type="reset" class="btn btn-danger" value="Cancel" />
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </div>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+{% endblock %}

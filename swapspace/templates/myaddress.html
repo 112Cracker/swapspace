@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% if address %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+
+                <div class="card-body">
+                    <h5 class="card-title text-center">My Address</h5>
+
+                    <form class="form-signin">
+                        <div class="form-label-group">
+                            <input type="text" id="inputAddress1" name="address1" class="form-control" placeholder="Street and number, P.O.box, c/o." value="{{address.address1}}" required autofocus readonly>
+                            <label for="inputAddress1">Street and number, P.O.box, c/o.</label>
+                        </div>
+                        <div class="form-label-group">
+                            <input type="text" id="inputAddress2" name="address2" class="form-control" placeholder="Apartment, suite, unit, building, floor, etc." value="{{address.address2}}" required autofocus readonly>
+                            <label for="inputAddress2">Apartment, suite, unit, building, floor, etc.</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputCity" name="city" class="form-control" placeholder="City" value="{{address.city}}" required readonly>
+                            <label for="inputCity">City</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputState" name="state" class="form-control" placeholder="State" value="{{address.state}}" required readonly>
+                            <label for="inputState">State</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="inputZipCode" name="zip_code" class="form-control" pattern="[0-9]{5}" placeholder="Five digit zip code" value="{{address.zip_code}}" required readonly>
+                            <label for="inputZipCode">Zip Code</label>
+                        </div>
+                        <button class="btn btn-lg btn-block text-uppercase form-submit-btn"><a href="{% url 'edit-address' %}">Update Address</a></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+
+                <div class="card-body">
+                    <h5 class="card-title text-center">My Address</h5>
+                    <h5 class="card-title text-center">
+                        <a href="{% url 'create-address' %}">Add Address</a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

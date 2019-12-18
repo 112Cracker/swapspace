@@ -1,0 +1,109 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- reconnecting-websocket library -->
+        <script type="text/javascript" src='{% static "js/reconnecting-websocket.min.js" %}'></script>
+
+        <!-- frontend js -->
+        <script type="text/javascript" src='{% static "js/frontend.js" %}'></script>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans" rel="stylesheet">
+
+        <title>SwapSpace</title>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-expand-md bg-light">
+          <a class="navbar-brand" href="{% url 'home' %}">SwapSpace</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Home<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'exchange' %}">Exchange</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'trade'%}">Trade</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'mytrans'%}">My Transactions</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+              {% if user.is_active %}
+                {% if not is_trade %} <!-- user cannot upload in trade page -->
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'newitem' %}">Upload Item</a>
+                </li>
+                {% endif %}
+                {% if is_trade %} <!-- user can only view cart in trade page -->
+                 <li class="nav-item">
+                  <a class="nav-link" href="{% url 'shoppingCart' %}">
+                    <div id="ex4">
+                      <span class="p1 has-badge" data-count="{{cartNum}}">
+                        <i class="fa fa-shopping-cart" data-count="4b"></i>
+                      </span>
+                    </div>
+                  </a>
+                </li>
+                {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'myprofile' %}">My Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <span class="nav-slash">&#47</span>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Sign Up</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
+        <div class="container">
+            {% block search-bar %}
+            {% endblock %}
+        </div>
+        <div class="container">
+            {% block title %}
+            {% endblock %}
+        </div>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+
+</html>

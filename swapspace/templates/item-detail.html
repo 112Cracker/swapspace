@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- <div class="itemdiv">
+    <div class="itemimg">
+        <img src="{% if image %}{{ image }}{% else %}{% static 'img/no_img.png' %}{% endif %}" height="150" width="150"><br>
+        {{name}}<br>
+        {{description}}<br>
+        {{price}}<br>
+    </div>
+</div> -->
+
+<div class="item-detail-container container">
+	<div class="wrapper row">
+
+		<div class="preview col-4">
+			<div class="preview-pic tab-content">
+			  <div class="tab-pane active" id="pic-1">
+                    <img src="{{MEDIA_URL}}{{item.image1}}">
+            	</div>
+			  	<div class="tab-pane" id="pic-2">
+                    <img src="{{MEDIA_URL}}{{item.image2}}">
+			  	</div>
+                <div class="tab-pane" id="pic-3">
+                    <img src="{{MEDIA_URL}}{{item.image3}}">
+                </div>
+			</div>
+
+			<ul class="preview-thumbnail nav nav-tabs">
+				<li class="active">
+					<a data-target="#pic-1" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image1}}">
+					</a>
+				</li>
+				<li>
+					<a data-target="#pic-2" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image2}}">
+					</a>
+				</li>
+				<li>
+					<a data-target="#pic-3" data-toggle="tab">
+                        <img src="{{MEDIA_URL}}{{item.image3}}">
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="details col-5">
+			<label class="product-title">{{item.name}}</label>
+
+			<p class="product-description">{{item.description}}</p>
+
+			<label class="entry-container">
+				<span class="entry-label">Price</span>
+				<span>&#58;</span>
+				<span class="price entry-content">{{item.price}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label"><i class="fas fa-map-marker-alt"></i></span>
+				<span>&nbsp;</span>
+				<span class="entry-content">{{address}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label">Created Date</span>
+				<span>&#58;</span>
+				<span class="entry-content">{{item.created}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label">Updated Date</span>
+				<span>&#58;</span>
+				<span class="entry-content">{{item.updated}}</span>
+			</label>
+
+			{% if item.status <= 2 %}
+			<div class="action">
+				<!-- need to update -->
+				<button id="send-request-btn" class="send-request-btn btn btn-primary" type="submit" onclick="getMyItems({{item.id}})" data-toggle="modal" data-target="#dropdown-items-content" >Send Request</button>
+				<!-- temp ui to test send request and select a item  -->
+				{% if rated %}
+				<i class="fas fa-heart" id="id-rate"></i>
+				{% else %}
+				<i class="far fa-heart" id="id-rate" onclick="detailAddToFavorites({{item.id}})"></i>
+				{% endif %}	
+				<!-- select a item from below to send request -->
+				<div class="modal" id="dropdown-items-content">
+					<div class="modal-dialog">
+				      <div class="modal-content">
+				      
+				        <!-- Modal Header -->
+				        <div class="modal-header">
+				          <h4 class="modal-title">Select and Send Request</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        
+				        <!-- Modal body -->
+				        <div class="modal-body" id="dropdown-items">
+				        </div>
+				        
+				        <!-- Modal footer -->
+				        <div class="modal-footer">
+				        	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				          <!-- <button type="button" id="request-btn" onclick="send_request('/exchange/request/', {{item.id}})" class="btn btn-success" data-dismiss="modal">Confirm</button> -->
+				        </div>
+				        
+				      </div>
+				    </div>
+				</div>		
+<!--
+				{% if rated %}
+				<i class="fas fa-heart"></i>
+				{% else %}
+				<span class="fa fa-heart"></span>
+				{% endif %}
+				</button>
+-->
+			</div>
+			{% elif item.status == 3 or item.status == 4 %}
+			<label class="entry-container"><span class="entry-label">This item has been exchanged.</span></label>
+			{% elif item.status == 5 %}
+			<label class="entry-container"><span class="entry-label">This item has been cancelled for exchange.</span></label>
+			{% endif %}
+		</div>
+
+		<div class="user-info col-3">
+			<div class="avatar preview-pic">
+				<div class="tab-pane">
+					{% if profile.portrait %}
+    				<img src="{% url 'profile_picture' profile.user %}" alt="{{profile.user.username}}">
+					{% else %}
+					<img src="{% static '/img/no_img.png' %}" alt="{{profile.user.username}}">
+					{% endif %}
+				</div>
+			</div>
+			<div class="bio">
+				<span class="username">{{owner.username}}</span>
+			</div>
+			<div class="rating">
+				<div class="stars">
+					{% for i in rating %}
+					<span class="fa fa-star checked"></span>
+					{% endfor %}
+					{% for j in range %}
+					<span class="fa fa-star"></span>
+					{% endfor %}
+				</div>
+				<span class="review-no">{{rate_cnt}}<span>&nbsp;reviews</span></span>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+  	function send_request(url, itemId) {
+  		var id = $("#dropdown-items a.active").attr('id');
+  		if (id != undefined && id != null) {
+  			window.location = url +itemId+"%20"+id;
+  		}
+  	}
+  </script>
+{% endblock %}

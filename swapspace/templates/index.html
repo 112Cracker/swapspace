@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-8 offset-2" id="logo-container">
+        <span id="logo">SwapSpace</span>
+    </div>
+</div>
+
+<div class="row index-header">
+    <span>Latest Updates: </span>
+</div>
+<div class="grid">
+    <div class="row index-recommend">
+        {% for item in items %}
+        <div class="col-md-4">
+            <figure class="effect-ravi" class="effect-ravi" onclick="window.location.href='/exchange/items/{{item.pk}}'">
+                    <img src="{{MEDIA_URL}}{{item.image1}}">
+                <figcaption>
+                    <p>
+                        <a href="#">
+                            <span>
+                                <label>{{item.name}}</label>
+                                <br>
+                                <label class="heart">
+                                    <i class="fas fa-heart" onclick="addToFavorites({{item.id}})"></i>
+                                    <label>&nbsp;</label>
+                                    <label id="id-favorites-count-{{item.id}}">{{item.favorites}}</label>
+                                    <label>&nbsp;</label>
+                                    <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{item.price}}</label>
+                                </label>
+                                
+                            </span>
+                        </a>
+                    </p>
+                </figcaption>
+            </figure>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

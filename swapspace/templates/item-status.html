@@ -1,0 +1,289 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="item-detail-container container">
+	<div class="wrapper row">
+
+		<div class="preview col-4">
+			<div class="preview-pic tab-content">
+			  <div class="tab-pane active" id="pic-1"><img src="{% if item.image1 %} {{MEDIA_URL}}{{item.image1}} {% else %} {% static 'img/macbook.png' %} {% endif %}"></div>
+			  <div class="tab-pane" id="pic-2"><img src="{% if item.image2 %} {{MEDIA_URL}}{{item.image2}} {% else %} {% static 'img/macbook.png' %} {% endif %}"></div>
+			  <div class="tab-pane" id="pic-3"><img src="{% if item.image3 %} {{MEDIA_URL}}{{item.image3}} {% else %} {% static 'img/macbook.png' %} {% endif %}"></div>
+			</div>
+
+			<ul class="preview-thumbnail nav nav-tabs">
+				<li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="{% if item.image1 %} {{MEDIA_URL}}{{item.image1}} {% else %} {% static 'img/macbook.png' %} {% endif %}"></a></li>
+				<li><a data-target="#pic-2" data-toggle="tab"><img src="{% if item.image2 %} {{MEDIA_URL}}{{item.image2}} {% else %} {% static 'img/macbook.png' %} {% endif %}"  /></a></li>
+				<li><a data-target="#pic-3" data-toggle="tab"><img src="{% if item.image3 %} {{MEDIA_URL}}{{item.image3}} {% else %} {% static 'img/macbook.png' %} {% endif %}"></a></li>
+			</ul>
+		</div>
+
+		<div class="details col-5">
+			<label class="product-title">{{item.name}}</label>
+
+			<p class="product-description">{{item.description}}</p>
+
+			<label class="entry-container">
+				<span class="entry-label">Price</span>
+				<span>&#58;</span>
+				<span class="price entry-content">{{item.price}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label"><i class="fas fa-map-marker-alt"></i></span>
+				<span>&nbsp;</span>
+				<span class="entry-content">{{address}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label">Created Date</span>
+				<span>&#58;</span>
+				<span class="entry-content">{{item.created}}</span>
+			</label>
+			<label class="entry-container">
+				<span class="entry-label">Updated Date</span>
+				<span>&#58;</span>
+				<span class="entry-content">{{item.updated}}</span>
+			</label>
+
+			{% if item.status < 2 %}
+			<div class="action">
+				<button class="send-request-btn btn btn-default" onclick="window.location.href='/mytrans/{{item.id}}/edit'">Edit Item</button>
+				<button class="send-request-btn btn btn-default" onclick="window.location.href='/mytrans/{{item.id}}/cancel'">Cancel Item</button>
+			</div>
+			{% elif item.status == 4 %}
+			<div class="action">
+				<button class="send-request-btn btn btn-default" onclick="window.location.href='/mytrans/{{item.id}}/reupload'">Reupload Item</button>
+			</div>
+			{% endif %}
+		</div>
+		<div class="request-container col-3">
+			<h5><i class="fas fa-exclamation-circle"></i>Exchange Requests</h5>
+			{% if item.status <= 2 %}
+			<div id="accordion" role="tablist">
+			{% for request in item.accept.all %}
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingAccept{{forloop.counter}}">
+			      <h6 class="mb-0">
+			      	<label class="status-tag">Wait For Response</label>
+			        <a class="item-name" data-toggle="collapse" href="#collapseAccept{{forloop.counter}}" aria-expanded="true" aria-controls="collapseAccept{{forloop.counter}}">
+			          {{request.name}}
+			        </a>
+			      </h6>
+			    </div>
+
+			    <div id="collapseAccept{{forloop.counter}}" class="collapse" role="tabpanel" aria-labelledby="headingAccept{{forloop.counter}}" data-parent="#accordion">
+			      <div class="card-body">
+			        <div class="item-img row">
+						<!-- <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'"> -->
+						<figure class="effect-ravi col-12">
+			                {% if request.status <= 2 %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% else %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% endif %}
+			                <figcaption>
+			                    <p>
+			                        <a href="/exchange/items/{{request.pk}}">
+			                            <span>
+			                            	<label class="prompt"><i class="fas fa-eye"></i>&nbsp;click to view item details</label>
+			                            	<label>{{request.name}}</label>
+			                            	<br/>
+			                                <label class="heart"><i class="fas fa-heart"></i>{{request.favorites}}</label>
+			                                <label>&nbsp;</label>
+			                                <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{request.price}}</label>
+			                            </span>
+			                        </a>
+			                    </p>
+			                </figcaption>
+			            </figure>
+					</div>
+					<div class="action">
+						<button class="send-request-btn btn btn-danger" onclick="window.location.href='/mytrans/{{item.id}}/cancel/{{request.id}}'">Cancel</button>
+						<button class="send-request-btn btn btn-primary">Start Chat</button>
+					</div>
+			      </div>
+			    </div>
+			  </div>
+			  {% endfor %}
+			  {% for request in item.request.all %}
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingRequest{{forloop.counter}}">
+			      <h6 class="mb-0">
+			      	<label class="status-tag">Wait For Confirmation</label>
+			        <a class="item-name" data-toggle="collapse" href="#collapseRequest{{forloop.counter}}" aria-expanded="true" aria-controls="collapseRequest{{forloop.counter}}">
+			          {{request.name}}
+			        </a>
+			      </h6>
+			    </div>
+
+			    <div id="collapseRequest{{forloop.counter}}" class="collapse" role="tabpanel" aria-labelledby="headingRequest{{forloop.counter}}" data-parent="#accordion">
+			      <div class="card-body">
+			        <div class="item-img row">
+						<!-- <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'"> -->
+						<figure class="effect-ravi col-12">
+			                {% if request.status <= 2 %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% else %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% endif %}
+			                <figcaption>
+			                    <p>
+			                        <a href="/exchange/items/{{request.pk}}">
+			                            <span>
+			                            	<label class="prompt"><i class="fas fa-eye"></i>&nbsp;click to view item details</label>
+			                            	<label>{{request.name}}</label>
+			                            	<br/>
+			                                <label class="heart"><i class="fas fa-heart"></i>{{request.favorites}}</label>
+			                                <label>&nbsp;</label>
+			                                <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{request.price}}</label>
+			                            </span>
+			                        </a>
+			                    </p>
+			                </figcaption>
+			            </figure>
+					</div>
+					<div class="action">
+						<button class="btn btn-danger" onclick="window.location.href='/mytrans/{{item.id}}/cancel/{{request.id}}'">Cancel</button>
+						<button  onclick="window.location.href='/chat'" class="btn btn-primary">Start Chat</button>
+					</div>
+			      </div>
+			    </div>
+			  </div>
+				{% endfor %}
+				{% for request in item.myRequesteds.all %}
+				<div class="card">
+			    <div class="card-header" role="tab" id="headingRequested{{forloop.counter}}">
+			      <h6 class="mb-0">
+			      	<label class="status-tag">{{request.user.username}} Requested</label>
+			        <a class="item-name" data-toggle="collapse" href="#collapseRequested{{forloop.counter}}" aria-expanded="true" aria-controls="collapseRequested{{forloop.counter}}">
+			          {{request.name}}
+			        </a>
+			      </h6>
+			    </div>
+
+			    <div id="collapseRequested{{forloop.counter}}" class="collapse" role="tabpanel" aria-labelledby="headingRequested{{forloop.counter}}" data-parent="#accordion">
+			      <div class="card-body">
+			        <div class="item-img row">
+						<!-- <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'"> -->
+						<figure class="effect-ravi col-12">
+			                {% if request.status <= 2 %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% else %}
+			                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+			                {% endif %}
+			                <figcaption>
+			                    <p>
+			                        <a href="/exchange/items/{{request.pk}}">
+			                            <span>
+			                            	<label class="prompt"><i class="fas fa-eye"></i>&nbsp;click to view item details</label>
+			                            	<label>{{request.name}}</label>
+			                            	<br/>
+			                                <label class="heart"><i class="fas fa-heart"></i>{{request.favorites}}</label>
+			                                <label>&nbsp;</label>
+			                                <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{request.price}}</label>
+			                            </span>
+			                        </a>
+			                    </p>
+			                </figcaption>
+			            </figure>
+					</div>
+					<div class="action">
+						<button class="btn btn-danger" onclick="window.location.href='/mytrans/{{item.id}}/decline/{{request.id}}'">Decline</button>
+						<button class="btn btn-success" onclick="window.location.href='/mytrans/{{item.id}}/accept/{{request.id}}'">Accept</button>
+						<button class="btn btn-primary" onclick="window.location.href='/chat'">Start Chat</button>
+					</div>
+			      </div>
+			    </div>
+			  </div>
+				{% endfor %}
+			  	{% for request in item.myAccepteds.all %}
+			  	<div class="card">
+				    <div class="card-header" role="tab" id="headingRequested{{forloop.counter}}">
+				      <h6 class="mb-0">
+				      	<label class="status-tag">{{request.user.username}} Accepted</label>
+				        <a class="item-name" data-toggle="collapse" href="#collapseRequested{{forloop.counter}}" aria-expanded="true" aria-controls="collapseRequested{{forloop.counter}}">
+				          {{request.name}}
+				        </a>
+				      </h6>
+				    </div>
+			    <div id="collapseRequested{{forloop.counter}}" class="collapse" role="tabpanel" aria-labelledby="headingRequested{{forloop.counter}}" data-parent="#accordion">
+			      	<div class="card-body">
+				        <div class="item-img row">
+							<!-- <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'"> -->
+							<figure class="effect-ravi col-12">
+				                {% if request.status <= 2 %}
+				                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+				                {% else %}
+				                <img src="{{MEDIA_URL}}{{request.image1}}" onclick="window.location.href='/exchange/items/{{request.pk}}'">
+				                {% endif %}
+				                <figcaption>
+				                    <p>
+				                        <a href="/exchange/items/{{request.pk}}">
+				                            <span>
+				                            	<label class="prompt"><i class="fas fa-eye"></i>&nbsp;click to view item details</label>
+				                            	<label>{{request.name}}</label>
+				                            	<br/>
+				                                <label class="heart"><i class="fas fa-heart"></i>{{request.favorites}}</label>
+				                                <label>&nbsp;</label>
+				                                <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{request.price}}</label>
+				                            </span>
+				                        </a>
+				                    </p>
+				                </figcaption>
+				            </figure>
+						</div>
+						<div class="action">
+							<button class="btn btn-danger" onclick="window.location.href='/mytrans/{{item.id}}/confirm/{{request.id}}'">Confirm</button>
+							<button class="btn btn-success" onclick="window.location.href='/mytrans/{{item.id}}/cancel/{{request.id}}'">Cancel</button>
+							<button class="btn btn-primary" onclick="window.location.href='/chat'">Start Chat</button>
+						</div>
+			    	</div>
+				</div>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% if item.status <= 2 %}
+<hr/>
+<div class="index-header">
+    <h5>System matched for you: </h5>
+</div>
+<div class="grid">
+    <div class="row trans-recommend">
+        {% for match in item.automatch.all %}
+        <div class="col-4">
+            <figure class="effect-ravi" class="effect-ravi" onclick="window.location.href='/exchange/items/{{match.pk}}'">
+                    <img src="{{MEDIA_URL}}{{match.image1}}">
+                <figcaption>
+                    <p>
+                        <a href="#">
+                            <span>
+                                <label>{{match.name}}</label>
+                                <br>
+                                <label class="heart">
+                                    <i class="fas fa-heart" onclick="addToFavorites({{match.id}})"></i>
+                                    <label>&nbsp;</label>
+                                    <label id="id-favorites-count-{{item.id}}">{{match.favorites}}</label>
+                                    <label>&nbsp;</label>
+		                            <label class="hourglass"><i class="fas fa-dollar-sign"></i>{{match.price}}</label>
+                                </label>
+                                
+                            </span>
+                        </a>
+                    </p>
+                </figcaption>
+            </figure>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

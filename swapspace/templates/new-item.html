@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-10 col-lg-8 mx-auto">
+        <div class="card card-signin my-5">
+
+            <div class="card-body">
+                <h5 class="card-title text-center">New Exchange Item</h5>
+
+                <form class="form-signin" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
+                    <div class="form-label-group">
+                        <input type="text" id="inputItemname" name="name" class="form-control" placeholder="name" required>
+                        <label for="inputItemname">Name</label>
+                    </div>
+
+                    <div>{{form.category.label_tag}} {{form.category}} {{form.category.errors}}</div>
+                    <div class="form-label-group">
+                        <input type="text" id="inputDescription" name="description" class="form-control" placeholder="description" required>
+                        <label for="inputDescription">Description</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="number" step="0.01" id="inputPrice" name="price" class="form-control" placeholder="price" required>
+                        <label for="inputPrice">Price Assessment</label>
+                    </div>
+                    <div>{{form.image1.label_tag}} {{form.image1}} {{form.image1.errors}}</div>
+                    <div>{{form.image2.label_tag}} {{form.image2}} {{form.image2.errors}}</div>
+                    <div>{{form.image3.label_tag}} {{form.image3}} {{form.image3.errors}}</div>
+
+                    <button class="btn btn-lg btn-block text-uppercase" type="submit">Post</button>
+
+                {% csrf_token %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{form.errors}}
+{% endblock %}
